@@ -15,13 +15,17 @@ just controllers, Form Requests, API Resources, and a green test suite.
 ## Installation
 
 ```bash
-laravel new my-app --using=laraveldaily/api-starter-kit --no-node
+laravel new my-app --using=laraveldaily/api-starter-kit
 ```
 
-`--no-node` skips the installer's npm install/build prompt — this kit ships no
-front-end, so there is nothing to build. (If you forget the flag, just answer
-"No" when asked.) When prompted for a testing framework, pick **Pest** — the
-kit's test suite is already written with it.
+The installer asks two questions:
+
+- **Which testing framework do you prefer?** Pick **Pest** — the kit's test
+  suite is already written with it.
+- **Would you like to run npm install and npm run build?** Answer **No** —
+  this kit ships no front-end, so there is nothing to install or build. (The
+  installer asks this for every starter kit; it cannot be skipped from the
+  kit's side on current installer releases.)
 
 Or with Composer directly (no prompts at all):
 
