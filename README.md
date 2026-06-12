@@ -4,6 +4,12 @@ A Laravel **API-only** starter kit: token-based authentication and account
 management as plain, readable Laravel code. No front-end, no Vite, no Fortify —
 just controllers, Form Requests, API Resources, and a green test suite.
 
+**Disclaimer**: this starter kit was built fully by Claude Fable 5 model, after
+deep planning session and a few building iterations. So it wasn't a one-shot or
+vibe-coding, but LLM did all the implementation work.
+
+## Features
+
 - **Token auth** via [Laravel Sanctum](https://laravel.com/docs/sanctum) personal
   access tokens — DB-backed, revocable, works for mobile, SPA, and CLI clients.
 - **Code-based password reset** — the API emails a 6-digit code, the client posts
