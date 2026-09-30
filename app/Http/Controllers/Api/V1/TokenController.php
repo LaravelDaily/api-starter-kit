@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\V1\RevokeOtherTokensAction;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Api\V1\TokenResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class TokenController extends Controller
 {
@@ -41,12 +41,9 @@ class TokenController extends Controller
      *
      * Revoke every token except the one used for the current request.
      */
-    public function destroyOthers(Request $request): Response
+    public function destroyOthers(Request $request, RevokeOtherTokensAction $action): Response
     {
-        /** @var PersonalAccessToken $currentToken */
-        $currentToken = $request->user()->currentAccessToken();
-
-        $request->user()->tokens()->where('id', '!=', $currentToken->id)->delete();
+        $action->handle($request->user());
 
         return response()->noContent();
     }

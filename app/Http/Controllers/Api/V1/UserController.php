@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Actions\V1\DeleteAccountAction;
+use App\Actions\V1\UpdatePasswordAction;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\V1\DeleteAccountRequest;
 use App\Http\Requests\Api\V1\UpdatePasswordRequest;
@@ -10,8 +12,6 @@ use App\Http\Resources\Api\V1\UserResource;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Hash;
-use Laravel\Sanctum\PersonalAccessToken;
 
 class UserController extends Controller
 {
@@ -42,16 +42,9 @@ class UserController extends Controller
      *
      * Change the password and revoke every token except the current one.
      */
-    public function updatePassword(UpdatePasswordRequest $request): JsonResponse
+    public function updatePassword(UpdatePasswordRequest $request, UpdatePasswordAction $action): JsonResponse
     {
-        $user = $request->user();
-
-        $user->update(['password' => Hash::make($request->validated('password'))]);
-
-        /** @var PersonalAccessToken $currentToken */
-        $currentToken = $user->currentAccessToken();
-
-        $user->tokens()->where('id', '!=', $currentToken->id)->delete();
+        $action->handle($request->user(), $request->validated('password'));
 
         return response()->json([
             'message' => __('Password updated.'),
@@ -63,13 +56,9 @@ class UserController extends Controller
      *
      * Permanently delete the account and revoke all of its tokens.
      */
-    public function destroy(DeleteAccountRequest $request): Response
+    public function destroy(DeleteAccountRequest $request, DeleteAccountAction $action): Response
     {
-        $user = $request->user();
-
-        $user->tokens()->delete();
-
-        $user->delete();
+        $action->handle($request->user());
 
         return response()->noContent();
     }
